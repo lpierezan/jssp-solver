@@ -1,0 +1,49 @@
+- Break even makespan
+ - no improve
+- Ranking moves based on critical path
+ - no improve
+
+- Dynamic Tabu List Size?
+ - no improve
+ 
+- Stop Criterion
+	A/B strategy?
+
+- Decrease amount of dynamic memory use
+
+===================
+Ideas
+A upper bound of the makespan can be used to accelerate the local search? 
+
+MH
+
+1 - Generate Initial Solutions Population (active scheduling generaton)
+	- every generated solutions receive a ls improve.
+	- can use distance parameter here?
+
+2 - 
+
+incluir teste para ver se já está no ponto ótimo.
+
+select pair biased by distance.
+
+deixar população com sol inviáveis?
+
+métodos para não deixar a distância entre todos se concentrar.
+
+não incluir soluções repetidas
+soluções elite dominam?
+
+
+==========================
+
+População grande (150) com 
+poucas gerações , pouca elite e pouca mutação e 
+mais repetição do procedimento (10)
+Pequena lista tabu.
+
+
+
+
+
+

@@ -1,0 +1,16 @@
+﻿Studying N6 and N7 neighborhoods on Balas and Zhang.
+
+
+
+
+(Zhang - Theorem 1)
+Move u -> v is OK if not exists path from JS(u) to v.
+
+
+(Zhang - Theorem 2)
+Move u <- v is OK if not exists path from u to JP(v)
+
+
+(Balas)
+Move u->v can be evaluated in a linear recursive manner from data in machine block [u,v]  
+Move u<-v can be evaluated in a linear recursive manner from data in machine block [u,v]
