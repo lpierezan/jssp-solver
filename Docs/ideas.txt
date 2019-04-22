@@ -13,7 +13,7 @@
 
 ===================
 Ideas
-A upper bound of the makespan can be used to accelerate the local search? 
+Can a upper bound of the makespan be used to accelerate the local search? 
 
 MH
 
@@ -23,27 +23,22 @@ MH
 
 2 - 
 
-incluir teste para ver se já está no ponto ótimo.
+Add test to check for optimal point.
 
 select pair biased by distance.
 
-deixar população com sol inviáveis?
+Keep infeasible solutions in the population?
 
-métodos para não deixar a distância entre todos se concentrar.
+Methods to keep variability in population (high inner distances). 
 
-não incluir soluções repetidas
-soluções elite dominam?
-
+Remove duplicate solutions.
 
 ==========================
+Current setting:
 
-População grande (150) com 
-poucas gerações , pouca elite e pouca mutação e 
-mais repetição do procedimento (10)
-Pequena lista tabu.
-
-
-
-
-
+Population size: 150
+Few generations
+Few elite and mutation
+Procedure repetition: 10
+Small tabu list.
 
