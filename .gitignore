@@ -262,6 +262,5 @@ __pycache__/
 # ==== Mine ====
 *.diagsession
 papers/
-
-
-
+output/
+doc/.~*
