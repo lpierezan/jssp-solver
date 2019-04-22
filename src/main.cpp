@@ -2843,7 +2843,7 @@ class instance_selector
 
 public:
     
-    string insts_folder_path = "./Instances/";
+    string insts_folder_path = "./instances/";
     
     int ib, ie, i_cur;
 
