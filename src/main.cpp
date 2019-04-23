@@ -1,4 +1,3 @@
-
 #include <chrono>
 #include <iostream>
 #include <vector>
@@ -19,92 +18,11 @@
 #include <typeinfo>
 #include <iomanip>
 #include <sstream>
+#include "global.hpp"
+#include "permutation.hpp"
+#include "time_control.hpp"
 
 using namespace std;
-// ============= Utility =====================================
-typedef vector<vector<int>> vvi;
-typedef vector<int> vi;
-#define ALL(v) (v).begin(), (v).end()
-#define D_INF (DBL_MAX)
-#define I32_INF (1 << 30)
-
-hash<int> hsh_int;
-
-auto rand_gen = std::default_random_engine(0);
-void reset_rand(int seed)
-{
-    rand_gen = std::default_random_engine(seed);
-}
-long long int overflow_test = ((long long)1 << 62);
-//clever online shuffle algorithm
-int select_shuffle(vector<int> &v, int &max_idx)
-{
-    auto pos = max_idx > 0 ? rand_gen() % (max_idx + 1) : 0;
-    swap(v[pos], v[max_idx]);
-    max_idx--;
-    return v[max_idx + 1];
-}
-
-string pii_to_str(pair<int, int> p) { return "(" + to_string(p.first) + "," + to_string(p.second) + ")"; }
-
-class permutation
-{
-public:
-    static bool check(vi v, int min = 1, int max = -1)
-    {
-        //[min , max]
-        if (max == -1)
-            max = v.size();
-        if (max - min + 1 != v.size())
-            return false;
-        vector<bool> mark(v.size(), false);
-        for (int i = 0; i < v.size(); i++)
-        {
-            int p = v[i] - min;
-            if (p < 0 || p >= mark.size())
-                return false;
-            if (mark[p])
-                return false;
-
-            mark[p] = true;
-        }
-        return true;
-    }
-
-    static vi generate_rand(int min, int max, default_random_engine &rand_gen)
-    {
-        vi perm(max - min + 1);
-        for (int i = 0; i < perm.size(); i++)
-        {
-            perm[i] = i + min;
-        }
-        shuffle(ALL(perm), rand_gen);
-        return perm;
-    }
-};
-//============================================================
-
-// =============== Time/Clock Measurement ====================
-using ms = chrono::milliseconds;
-using get_time = chrono::steady_clock;
-#define to_time(x) (chrono::duration_cast<ms>(x).count())
-
-//global clock (TODO Improve design - make it a class)
-auto global_time = get_time::now();
-long long global_tl_sec;
-bool active_time_limit = false;
-void restart_global_clock(long long tl_sec, bool active_tl_test)
-{
-    global_time = get_time::now();
-    global_tl_sec = tl_sec;
-    active_time_limit = active_tl_test;
-}
-bool tl_clock_check(long long &duration_ms)
-{
-    duration_ms = to_time(get_time::now() - global_time);
-    return active_time_limit && ((duration_ms / 1000.0) >= global_tl_sec);
-}
-// ===========================================================
 
 // ===================== Statistics ===================
 
@@ -124,6 +42,8 @@ class stats_stream
     long nsample = 0;
     list<Tnum> seq;
     list<double> time_seq;
+
+    static const long long int overflow_test = ((long long)1 << 62);
 
 public:
     stats_stream() {}
@@ -1051,6 +971,7 @@ public:
     class move_mem_data
     {
         vi block_idxs;
+        static std::hash<int> hsh_int;
 
     public:
         bool fw;
@@ -1167,7 +1088,7 @@ public:
             tabu_list_size = s.n * s.m * (tabu_list_factor >= 0 ? tabu_list_factor : 1);
         }
 
-        ls_parameters(){}
+        ls_parameters() {}
 
     } params;
 
@@ -1363,13 +1284,13 @@ private:
         //Reference Zhang2007
         bool is_acy = false;
         if (is_fw)
-        {   // u in front of v
+        { // u in front of v
             //Ensure that does not exist path js[u] -> v.
             int u_suc = s->js(u);
             is_acy = s->tail_dist[v] >= s->tail_dist[u_suc];
         }
         else
-        {   // u before v
+        { // u before v
             //Ensure that does not exist path v -> jp[u].
             int u_pred = s->jp(u);
             is_acy = s->head_dist[v] >= s->head_dist[u_pred];
@@ -2842,9 +2763,8 @@ class instance_selector
     string unique_inst_name;
 
 public:
-    
     string insts_folder_path = "./instances/";
-    
+
     int ib, ie, i_cur;
 
     string inst_name, path, inst_prefix;
@@ -2976,7 +2896,8 @@ void do_test_intances_check()
         }
         cout << "Sol Makespan = " << s.fo_online << endl;
 
-        if(s.fo_online != fo){
+        if (s.fo_online != fo)
+        {
             cout << "Test fail: objective functions dont match." << endl;
             return;
         }
@@ -3412,7 +3333,7 @@ void do_hard_test_mh()
 
 void do_inst_mh_solve()
 {
-    
+
     // instance selection config
     instance_selector inst_selector(1, 40); //Ta01 - Ta40
 
@@ -3434,7 +3355,7 @@ void do_inst_mh_solve()
 
         cout << inst_selector.signature();
 
-        long min_makespan = I32_INF, n_stop_no_move = 0;
+        long min_makespan = I32_INF;
         stats_stream<double> time_stream("time[s]");
         stats_stream<long> fo_stream("Makespan");
         stats_stream<int> n_it_stream("N IT");
@@ -3471,15 +3392,17 @@ void do_inst_mh_solve()
 
 int main()
 {
-    bool _flag_test_mode = false;
-
+    
     // =========== IO config =================
     string output_path = "output/jssp_out.txt";
     std::ofstream out(output_path);
 
-    if(out){
+    if (out)
+    {
         cout << "Output file: " << output_path << endl;
-    }else{
+    }
+    else
+    {
         cout << "Unable to create output file: " << output_path << endl;
         exit(1);
     }
@@ -3493,8 +3416,8 @@ int main()
     //do_hard_correctness_test_ls();
     //do_time_test_ls();
     //do_inst_ls_solve();
-    //do_simple_test_mh();
-    do_hard_test_mh();
+    do_simple_test_mh();
+    //do_hard_test_mh();
     //do_inst_mh_solve();
 
     std::cout.rdbuf(coutbuf);
