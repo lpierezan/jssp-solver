@@ -21,95 +21,9 @@
 #include "global.hpp"
 #include "permutation.hpp"
 #include "time_control.hpp"
+#include "stats_stream.hpp"
 
 using namespace std;
-
-// ===================== Statistics ===================
-
-template <typename Tnum>
-class stats_stream
-{
-    /* Collect stream of data and compute online statistics (good when not storing sequence)
-	*/
-    string name;
-    bool do_sd = false, save_seq = false,
-         is_over_time = false;
-
-    bool firstSample = true;
-    Tnum total = 0, minv, maxv;
-    long double total_2;
-
-    long nsample = 0;
-    list<Tnum> seq;
-    list<double> time_seq;
-
-    static const long long int overflow_test = ((long long)1 << 62);
-
-public:
-    stats_stream() {}
-    stats_stream(string _name) : name(_name) {}
-    stats_stream(string _name, bool _do_sd, bool _save_seq = false, bool _over_time = false)
-        : name(_name), do_sd(_do_sd), save_seq(_save_seq), is_over_time(_over_time){};
-
-    void clear()
-    {
-        firstSample = true;
-        total = 0, total_2 = 0, nsample = 0;
-        seq.clear();
-        time_seq.clear();
-    }
-    void add(Tnum x, double time_point = 0)
-    {
-        nsample++;
-        firstSample ? (minv = x) : (minv = min(minv, x));
-        firstSample ? (maxv = x) : (maxv = max(maxv, x));
-        firstSample = false;
-        total += x;
-        if (total > overflow_test)
-            cout << "Error Overflow risk" << endl, exit(1);
-        if (do_sd)
-        {
-            total_2 += x * x;
-            if (total_2 > overflow_test)
-            {
-                cout << "Error Overflow risk" << endl;
-                exit(1);
-            }
-        }
-        if (save_seq)
-        {
-            seq.push_back(x);
-            if (is_over_time)
-                time_seq.push_back(time_point);
-        }
-    }
-
-    Tnum get_total() { return total; }
-    double get_mean() { return nsample != 0 ? ((double)total / nsample) : 0; }
-    pair<Tnum, Tnum> get_min_max() { return make_pair(minv, maxv); }
-    double get_sd()
-    {
-        if (nsample == 0)
-            return 0;
-        //sqrt(E[X^2] - E[X]^2)
-        auto var = (total_2 / nsample) - ((long double)total / nsample) * ((double)total / nsample);
-        return sqrtl(var);
-    }
-    Tnum get_min() { return minv; };
-    Tnum get_max() { return maxv; };
-    bool empty() { return nsample == 0; }
-
-    void print(bool print_total = false)
-    {
-        cout << name << ": "
-             << "min = " << minv << " max = " << maxv << " mean = " << get_mean();
-        if (do_sd)
-            cout << " sd = " << get_sd();
-        if (print_total)
-            cout << " total = " << total;
-        cout << endl;
-    }
-};
 
 // ============== Instance and Solution representation ===============
 
