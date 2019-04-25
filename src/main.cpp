@@ -28,92 +28,10 @@
 #include "solution_generator.hpp"
 #include "ls_engine.hpp"
 #include "mh_engine.hpp"
+#include "instance_selector.hpp"
+
 
 using namespace std;
-
-// ================= Instance Selection =============================
-
-class instance_selector
-{
-    /* Instance format:
-	<header line>
-	<n jobs> <n machines> ....
-	Times
-	<Time matrix: T_i_j = process time of operation j of job i.
-	Machiens
-	<Machine matrix: M_i_j = machine that operation j of job i uses.
-	*/
-
-    bool is_unique_inst = false, generated = false;
-    string unique_inst_name;
-
-public:
-    string insts_folder_path = "./instances/";
-
-    int ib, ie, i_cur;
-
-    string inst_name, path, inst_prefix;
-
-    instance_selector(
-        int _ib = 1,
-        int _ie = 10,
-        string prefix = "Ta")
-    {
-        ib = _ib;
-        ie = _ie;
-        i_cur = ib - 1;
-        inst_prefix = prefix;
-    }
-
-    instance_selector(string _unique_inst_name)
-    {
-        is_unique_inst = true;
-        this->unique_inst_name = _unique_inst_name;
-    }
-
-private:
-    string generate_path()
-    {
-        stringstream s;
-        s << inst_prefix << setw(2) << setfill('0') << i_cur << ".txt";
-        return insts_folder_path + s.str();
-    }
-
-public:
-    string getNext()
-    {
-        if (is_unique_inst)
-        {
-            if (generated)
-                return "";
-            generated = true;
-
-            return insts_folder_path + unique_inst_name;
-        }
-        i_cur++;
-
-        if (i_cur > ie || i_cur < ib)
-            return "";
-        auto ret = generate_path();
-
-        return ret;
-    }
-
-    string signature()
-    {
-        stringstream s;
-        if (is_unique_inst)
-        {
-            s << unique_inst_name.substr(0, unique_inst_name.find('.'));
-        }
-        else
-        {
-            s << inst_prefix << setw(2) << setfill('0') << i_cur;
-        }
-
-        return s.str();
-    }
-};
 
 // ========================= Experiments =======================
 
