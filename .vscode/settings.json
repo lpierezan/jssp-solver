@@ -45,5 +45,5 @@
         "optional": "cpp"
     },
     "terminal.integrated.shell.windows": "cmd.exe",
-    "C_Cpp.intelliSenseEngineFallback": "Enabled"
+    "C_Cpp.intelliSenseEngineFallback": "Disabled"
 }
