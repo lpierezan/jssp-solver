@@ -1,10 +1,13 @@
-Implementation of a Solver (using Metaheuristics approaches) for the Job Shop scheduling Problem.
-It started as a project of the postgraduate Metaheuristics course at Puc-Rio in 04/2016.
+# Job Shop Scheduling Problem Solver.
+----------
+
+Metaheuristics approaches for the Job Shop Scheduling Problem.
 
 Project presentation at:
 Docs/Job Shop Scheduling Problem – Population Based Metaheuristics
 
-==============================
+----------
+
 The proposed method combines:
  - The Population Policy Control from:
 
@@ -28,8 +31,8 @@ job shop problem. Journal of Scheduling 8, 145–159.
 [5] Zhang, C. Y., Li, P. G., Guan, Z. L., Rao, Y. Q., 2007. A tabu search
 algorithm with a new neighborhood structure for the job shop scheduling problem. 
 Computers & Operations Research 34 (11), 3229 – 3242.
-==============================
 
-Selected Instances:
+----------
+
+Tested on instances from:
 http://optimizizer.com/TA.php
-
