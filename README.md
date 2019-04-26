@@ -4,7 +4,7 @@
 Metaheuristics approaches for the Job Shop Scheduling Problem.
 
 Project presentation at:
-Docs/Job Shop Scheduling Problem – Population Based Metaheuristics
+doc/Job Shop Scheduling Problem – Population Based Metaheuristics
 
 ----------
 
